@@ -17,8 +17,14 @@ const Home = () => {
           </button>
         </div>{" "}
         {/* Main Content */}
-        <div className="mt-4 border-b w-fit border-orange-500">
+        <div className="mt-4 mb-6 border-b w-fit border-orange-500">
           <h1 className="text-lg font-bold text-orange-500">Community Forum</h1>
+        </div>
+        <div>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum
+          molestias inventore dolorum. Laborum non blanditiis culpa sint
+          voluptatem quo ab, necessitatibus veritatis, magni soluta iste. Quis,
+          necessitatibus enim? Distinctio, aliquam?
         </div>
       </div>
     </div>
