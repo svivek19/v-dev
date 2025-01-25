@@ -1,10 +1,11 @@
 import React from "react";
 import { IoSearch } from "react-icons/io5";
+import QuestionAndAnswers from "../components/layouts/QuestionAndAnswers";
 
 const Home = () => {
   return (
-    <div className="container mx-auto px-4 md:px-6 lg:px-8 bg-[--bg-color]">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full mx-auto px-4 bg-[--bg-color]">
+      <div className="mx-auto">
         <div className="relative">
           <input
             type="text"
@@ -18,13 +19,10 @@ const Home = () => {
         </div>{" "}
         {/* Main Content */}
         <div className="mt-4 mb-6 border-b w-fit border-orange-500">
-          <h1 className="text-lg font-bold text-orange-500">Community Forum</h1>
+          <h1 className="text-xl font-bold text-orange-500">Community Forum</h1>
         </div>
-        <div>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum
-          molestias inventore dolorum. Laborum non blanditiis culpa sint
-          voluptatem quo ab, necessitatibus veritatis, magni soluta iste. Quis,
-          necessitatibus enim? Distinctio, aliquam?
+        <div className="w-fit flex justify-center">
+          <QuestionAndAnswers />
         </div>
       </div>
     </div>
