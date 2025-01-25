@@ -1,5 +1,6 @@
 import React from "react";
 import { FaBars } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ toggleSidebar }) => {
   return (
@@ -10,21 +11,21 @@ const Navbar = ({ toggleSidebar }) => {
       >
         <FaBars />
       </button>
-      <h1 className="text-xl font-semibold">V-DEV</h1>
-      <nav className="hidden lg:flex space-x-6">
-        <a href="#" className="hover:text-gray-400">
-          Home
-        </a>
-        <a href="#" className="hover:text-gray-400">
-          About
-        </a>
-        <a href="#" className="hover:text-gray-400">
-          Services
-        </a>
-        <a href="#" className="hover:text-gray-400">
-          Contact
-        </a>
-      </nav>
+      <h1 className="text-3xl font-semibold bg-gradient-to-r from-yellow-500 to-green-500 bg-clip-text text-transparent">
+        V-DEV
+      </h1>
+      <div className="flex items-center space-x-6">
+        <nav className="hidden lg:flex space-x-6">
+          <Link to="/" className="hover:text-gray-400">
+            Home
+          </Link>
+        </nav>
+        <div>
+          <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md">
+            Login
+          </button>
+        </div>
+      </div>
     </header>
   );
 };
