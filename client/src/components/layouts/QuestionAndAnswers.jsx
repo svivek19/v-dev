@@ -5,7 +5,7 @@ const QuestionAndAnswers = () => {
   const currentTime = new Date().toLocaleString();
 
   return (
-    <div className="border border-amber-400 p-4 rounded-lg mb-4 w-full mx-auto">
+    <div className="border border-amber-400 p-4 rounded-lg mb-4 w-full">
       {/* Question */}
       <div className="mb-4">
         <h1 className="text-lg sm:text-xl font-medium break-words">
@@ -41,7 +41,7 @@ const QuestionAndAnswers = () => {
             Here's how you can create a LinkedIn job application automation
             script:
           </p>
-          <div className="max-sm:w-96 overflow-x-auto">
+          <div className="w-full overflow-x-auto" id="code-block">
             <CodeBlock
               text={`
                 const currentTime = new Date().toLocaleString();

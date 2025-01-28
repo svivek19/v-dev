@@ -21,7 +21,7 @@ const Home = () => {
         <div className="mt-4 mb-6 border-b w-fit border-orange-500">
           <h1 className="text-xl font-bold text-orange-500">Community Forum</h1>
         </div>
-        <div className="w-fit flex justify-center">
+        <div className="w-full flex justify-center">
           <QuestionAndAnswers />
         </div>
       </div>

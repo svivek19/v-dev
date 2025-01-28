@@ -7,3 +7,8 @@
 * {
   font-family: "Ubuntu", serif;
 }
+
+#code-block :nth-child(1),
+#code-block :nth-child(1) > code {
+  white-space: pre-wrap !important;
+}
