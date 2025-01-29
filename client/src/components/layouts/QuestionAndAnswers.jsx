@@ -26,14 +26,9 @@ const QuestionAndAnswers = () => {
               className="w-10 h-10 rounded-full"
             />
             <div>
-              <p className="text-sm font-medium text-green-600">John Doe</p>
+              <p className="text-base font-medium text-green-600">John Doe</p>
               <p className="text-xs text-slate-500">{currentTime}</p>
             </div>
-          </div>
-          <div className="flex justify-end">
-            <p className="bg-gray-800 text-sm font-medium text-white p-2 rounded-full text-end">
-              {10}
-            </p>
           </div>
         </div>
         <div className="text-sm sm:text-base break-words text-gray-700">
@@ -43,10 +38,7 @@ const QuestionAndAnswers = () => {
           </p>
           <div className="w-full overflow-x-auto" id="code-block">
             <CodeBlock
-              text={`
-                const currentTime = new Date().toLocaleString();
-                
-                `}
+              text={`const currentTime = new Date().toLocaleString();`}
               language="javascript"
               theme={dracula}
               showLineNumbers={true}
@@ -54,9 +46,8 @@ const QuestionAndAnswers = () => {
               className="text-sm sm:text-base md:text-lg"
             />
           </div>
-
           <p className="mt-4">
-            Make sure to handle the authentication and job search parameters
+            Make sure to handle authentication and job search parameters
             carefully. Remember to respect LinkedIn's terms of service when
             using automation scripts.
           </p>

@@ -11,13 +11,19 @@ const Navbar = ({ toggleSidebar }) => {
       >
         <FaBars />
       </button>
-      <h1 className="text-3xl font-semibold bg-gradient-to-r from-yellow-500 to-green-500 bg-clip-text text-transparent">
+      <Link
+        to={"/"}
+        className="text-3xl font-semibold bg-gradient-to-r from-yellow-500 to-green-500 bg-clip-text text-transparent"
+      >
         V-DEV
-      </h1>
+      </Link>
       <div className="flex items-center space-x-6">
         <nav className="hidden lg:flex space-x-6">
           <Link to="/" className="hover:text-gray-400">
             Home
+          </Link>
+          <Link to="/ask" className="hover:text-gray-400">
+            Ask
           </Link>
         </nav>
         <div>

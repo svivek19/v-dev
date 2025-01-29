@@ -19,14 +19,21 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         </button>
       </div>
       <nav className="p-4">
-        <ul className="space-y-4">
-          <li>
+        <ul>
+          <li className="flex flex-col gap-4">
             <Link
               to="/"
               className="hover:text-gray-400"
               onClick={toggleSidebar}
             >
               Home
+            </Link>
+            <Link
+              to="/ask"
+              className="hover:text-gray-400"
+              onClick={toggleSidebar}
+            >
+              Ask
             </Link>
           </li>
         </ul>

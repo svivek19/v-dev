@@ -10,10 +10,10 @@ const Home = () => {
           <input
             type="text"
             placeholder="Search"
-            className="border border-gray-600 rounded-md px-10 py-1.5 w-full focus:outline-none"
+            className="border border-gray-600 rounded-lg px-10 py-1.5 w-full focus:outline-none"
           />
           <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-          <button className="absolute right-1 top-1/2 -translate-y-1/2 p-2 bg-orange-500 text-white rounded-lg">
+          <button className="absolute right-0.5 top-1/2 -translate-y-1/2 p-2 bg-orange-500 text-white rounded-lg">
             <IoSearch className="text-white font-bold" size={17} />
           </button>
         </div>{" "}
