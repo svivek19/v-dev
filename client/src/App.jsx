@@ -22,9 +22,11 @@ const AppContent = () => {
 
   return (
     <div className="flex h-screen">
-      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      {location.pathname !== "/" && (
+        <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      )}
       <div className="flex-1 flex flex-col">
-        <Navbar toggleSidebar={toggleSidebar} />
+        {location.pathname !== "/" && <Navbar toggleSidebar={toggleSidebar} />}
         {location.pathname !== "/" && <Breadcrumbs />}
         <div className="flex-1 p-4">
           <Routes>

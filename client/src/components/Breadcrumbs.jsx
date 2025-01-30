@@ -15,7 +15,7 @@ const Breadcrumbs = () => {
 
   return (
     <nav className="flex py-2 px-4 text-sm">
-      <Link to="/" className="text-blue-600 hover:text-blue-800">
+      <Link to="/home" className="text-blue-600 hover:text-blue-800">
         Home
       </Link>
       {pathnames.map((name, index) => {
