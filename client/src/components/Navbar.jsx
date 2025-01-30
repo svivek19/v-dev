@@ -12,14 +12,14 @@ const Navbar = ({ toggleSidebar }) => {
         <FaBars />
       </button>
       <Link
-        to={"/"}
+        to={"/home"}
         className="text-3xl font-semibold bg-gradient-to-r from-yellow-500 to-green-500 bg-clip-text text-transparent"
       >
         V-DEV
       </Link>
       <div className="flex items-center space-x-6">
         <nav className="hidden lg:flex space-x-6">
-          <Link to="/" className="hover:text-gray-400">
+          <Link to="/home" className="hover:text-gray-400">
             Home
           </Link>
           <Link to="/ask" className="hover:text-gray-400">
