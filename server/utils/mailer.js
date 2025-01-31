@@ -10,7 +10,7 @@ const transport = nodemailer.createTransport({
   },
 });
 
-const sendEMail = async (email, otp) => {
+const sendEmail = async (email, otp) => {
   await transport.sendMail({
     from: "V-DEV - Team",
     to: email,
@@ -19,4 +19,4 @@ const sendEMail = async (email, otp) => {
   });
 };
 
-module.exports = sendEMail;
+module.exports = sendEmail;

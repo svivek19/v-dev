@@ -8,7 +8,7 @@ const generateOTP = () =>
 const sendOTP = async (req, res) => {
   const { email } = req.body;
   const otp = generateOTP();
-  const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
+  const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
 
   try {
     // Check if email exists in the database
