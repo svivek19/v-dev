@@ -48,17 +48,22 @@ const sendOTP = async (req, res) => {
 
 const verifyOTP = async (req, res) => {
   const { email, phone, otp } = req.body;
-  const user = await User.findOne(email ? { email } : { phone });
 
-  if (!user || user.otp !== otp || new Date() > user.otpExpires) {
-    return res.status(400).json({ message: "Invalid or expired OTP" });
+  try {
+    const user = await User.findOne(email ? { email } : { phone });
+
+    if (!user || user.otp !== otp || new Date() > user.otpExpires) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.otp = null;
+    user.otpExpires = null;
+    await user.save();
+
+    return res.json({ message: "OTP verified successfully!" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
   }
-
-  user.otp = null;
-  user.otpExpires = null;
-  await user.save();
-
-  return res.json({ message: "OTP verified successfully!" });
 };
 
 module.exports = { sendOTP, verifyOTP };
