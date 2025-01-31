@@ -2,3 +2,5 @@ node_modules/
 dist/
 .gitignore
 .env
+# Firebase service account credentials (Keep this private)
+serviceAccountKey.json
