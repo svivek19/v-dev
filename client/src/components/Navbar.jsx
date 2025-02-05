@@ -1,13 +1,27 @@
-import React, { useState } from "react";
-import { FaBars } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import {
+  FaBars,
+  FaBirthdayCake,
+  FaEdit,
+  FaEnvelope,
+  FaUserAlt,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import { CiLogout } from "react-icons/ci";
 import { Modal } from "antd";
+import Axios from "../util/Axios";
 
 const Navbar = ({ toggleSidebar }) => {
+  const userId = localStorage.getItem("user");
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedDetails, setUpdatedDetails] = useState({
+    name: "",
+    age: "",
+    email: "",
+  });
 
   const handleProfileClick = () => {
     setIsModalOpen(true);
@@ -20,6 +34,45 @@ const Navbar = ({ toggleSidebar }) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedDetails({
+      ...updatedDetails,
+      [name]: value,
+    });
+  };
+
+  const getUserDetails = async () => {
+    try {
+      const response = await Axios.get(`/user/get/${userId}`);
+      setUpdatedDetails(response.data.response || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await Axios.patch(
+        `/user/update/${updatedDetails.email}`,
+        updatedDetails
+      );
+      getUserDetails();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
 
   return (
     <header className="bg-gray-900 text-white p-4 flex items-center justify-between shadow-md z-30">
@@ -60,11 +113,76 @@ const Navbar = ({ toggleSidebar }) => {
         onCancel={handleCloseModal}
         footer={false}
       >
-        <p className="text-sm text-gray-700">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut
-          tortor interdum, gravida leo in, interdum leo. Morbi malesuada massa
-          eu neque suscipit, vel fermentum arcu luctus. Suspendisse potenti.
-        </p>
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <FaUserAlt size={20} className="text-gray-600" />
+            <span className="font-semibold">Name:</span>
+            {isEditing ? (
+              <input
+                type="text"
+                name="name"
+                value={updatedDetails.name}
+                onChange={handleInputChange}
+                className="border px-2 py-1 rounded-md"
+              />
+            ) : (
+              <span className="capitalize">{updatedDetails.name}</span>
+            )}
+            <button onClick={handleEditToggle} className="ml-2 text-blue-600">
+              <FaEdit size={18} />
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <FaBirthdayCake size={20} className="text-gray-600" />
+            <span className="font-semibold">Age:</span>
+            {isEditing ? (
+              <input
+                type="number"
+                name="age"
+                value={updatedDetails.age}
+                onChange={handleInputChange}
+                className="border px-2 py-1 rounded-md"
+              />
+            ) : (
+              <span>{updatedDetails.age}</span>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <FaEnvelope size={20} className="text-gray-600" />
+            <span className="font-semibold">Email:</span>
+            {isEditing ? (
+              <input
+                type="email"
+                name="email"
+                disabled
+                value={updatedDetails.email}
+                onChange={handleInputChange}
+                className="border px-2 py-1 rounded-md"
+              />
+            ) : (
+              <span>{updatedDetails.email}</span>
+            )}
+          </div>
+
+          {isEditing && (
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleUpdate}
+                className="bg-blue-600 text-white py-2 px-4 rounded-md"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-400 text-white py-2 px-4 rounded-md cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
       </Modal>
     </header>
   );

@@ -44,7 +44,7 @@ const Login = () => {
         otp: otp,
       });
       console.log(response);
-      localStorage.setItem("user", JSON.stringify(response.data.response));
+      localStorage.setItem("user", response.data.response._id);
       setSuccessMessage("OTP verified successfully!");
       setTimeout(() => {
         navigate("/home");
