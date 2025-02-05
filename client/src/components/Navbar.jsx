@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { RxAvatar } from "react-icons/rx";
+import { CiLogout } from "react-icons/ci";
+import { Modal } from "antd";
 
 const Navbar = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleProfileClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleLogout = () => {
+    alert("logout");
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <header className="bg-gray-900 text-white p-4 flex items-center justify-between shadow-md z-30">
       <button
@@ -26,12 +44,28 @@ const Navbar = ({ toggleSidebar }) => {
             Ask
           </Link>
         </nav>
-        <div>
-          <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md">
-            Login
+        <div className="items-center flex gap-3">
+          <button className="cursor-pointer" onClick={handleProfileClick}>
+            <RxAvatar size={30} />
+          </button>
+          <button className="cursor-pointer" onClick={handleLogout}>
+            <CiLogout size={30} />
           </button>
         </div>
       </div>
+
+      <Modal
+        title="Profile Details"
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        footer={false}
+      >
+        <p className="text-sm text-gray-700">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut
+          tortor interdum, gravida leo in, interdum leo. Morbi malesuada massa
+          eu neque suscipit, vel fermentum arcu luctus. Suspendisse potenti.
+        </p>
+      </Modal>
     </header>
   );
 };
