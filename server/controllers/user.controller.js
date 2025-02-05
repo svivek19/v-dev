@@ -42,9 +42,23 @@ const getUser = async (req, res) => {
   }
 };
 
+const getUserbyId = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const response = await User.findOne({ _id });
+    return res
+      .status(200)
+      .json({ message: "Users found successfully", response: response });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error retrieving users", error: error.message });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email } = req.params;
     const { name, age } = req.body;
 
     if (!email) {
@@ -71,4 +85,4 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUser, updateUser };
+module.exports = { createUser, getUser, updateUser, getUserbyId };
