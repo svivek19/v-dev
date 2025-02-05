@@ -1,17 +1,21 @@
 const User = require("../models/User");
-const sendEmail = require("../utils/mailer");
+const sendEmail = require("../services/emailService");
 
-// 6 Digits - OTP generation
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
 const sendOTP = async (req, res) => {
   const { email } = req.body;
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email format." });
+  }
+
   const otp = generateOTP();
   const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
 
   try {
-    // Check if email exists in the database
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -20,17 +24,13 @@ const sendOTP = async (req, res) => {
         .json({ message: "Email not found in the database." });
     }
 
-    // If email exists, update OTP
-    await User.findOneAndUpdate(
-      { email },
-      { otp, otpExpires },
-      { upsert: true, new: true }
-    );
+    user.otp = otp;
+    user.otpExpires = otpExpires;
+    await user.save();
 
-    // Send OTP to email
     await sendEmail(email, otp);
 
-    return res.json({ status: 200, message: "OTP sent to email." });
+    return res.status(200).json({ message: "OTP sent to email." });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -41,17 +41,26 @@ const verifyOTP = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-
-    if (!user || user.otp !== otp || new Date() > user.otpExpires) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Email not found in the database." });
     }
 
-    // Clear OTP and expiration time after successful verification
+    // Check if OTP matches
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP." });
+    }
+
+    if (Date.now() > user.otpExpires) {
+      return res.status(400).json({ message: "OTP has expired." });
+    }
+
     user.otp = null;
     user.otpExpires = null;
     await user.save();
 
-    return res.json({ message: "OTP verified successfully!" });
+    return res.status(200).json({ message: "OTP verified successfully." });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
