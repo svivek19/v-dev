@@ -1,9 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "../util/Axios";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
+const sendOtpApiUrl = "/auth/send-otp";
+const verifyOtpApiUrl = "/auth/verify-otp";
+const createUserApiUrl = "/user/create";
+
 const Login = () => {
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [isOtp, setIsOtp] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+
+  const handleSendOtp = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await Axios.post(sendOtpApiUrl, {
+        email: loginEmail,
+      });
+      setSuccessMessage("OTP sent successfully!");
+      setIsOtp(true);
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await Axios.post(verifyOtpApiUrl, {
+        email: loginEmail,
+        otp: otp,
+      });
+      setSuccessMessage("OTP verified successfully!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+    } catch (error) {
+      setError(error.response?.data?.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateUser = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await Axios.post(createUserApiUrl, {
+        name,
+        age,
+        email: loginEmail,
+      });
+      setSuccessMessage("User created successfully!");
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to create user");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (error || successMessage) {
+      const timer = setTimeout(() => {
+        setError("");
+        setSuccessMessage("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error, successMessage]);
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-gray-100">
@@ -33,25 +110,24 @@ const Login = () => {
           <>
             <input
               type="text"
+              onChange={(e) => setName(e.target.value)}
               placeholder="Full Name"
               className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="number"
+              onChange={(e) => setAge(e.target.value)}
               min={0}
               max={15}
               placeholder="Age"
               className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+
             <input
               type="email"
               placeholder="Email address"
               className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setLoginEmail(e.target.value)}
             />
           </>
         )}
@@ -59,7 +135,8 @@ const Login = () => {
         {!isOtp && !isSignUp && (
           <input
             type="text"
-            placeholder="Email address or mobile number"
+            onChange={(e) => setLoginEmail(e.target.value)}
+            placeholder="Email address"
             className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         )}
@@ -71,20 +148,41 @@ const Login = () => {
               maxLength={6}
               placeholder="Enter 6-digit OTP"
               className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest"
+              onChange={(e) => setOtp(e.target.value)}
             />
-            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
-              Login
+            <button
+              className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+              onClick={handleVerifyOtp}
+              disabled={loading}
+            >
+              {loading ? "Verifying..." : "Verify OTP"}
             </button>
           </>
         )}
 
-        {!isOtp && (
+        {!isOtp && !isSignUp && (
           <button
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={() => setIsOtp(true)}
+            onClick={handleSendOtp}
+            disabled={loading}
           >
-            {isSignUp ? "Sign Up" : "Next"}
+            {loading ? "Sending OTP..." : "Send OTP"}
           </button>
+        )}
+
+        {!isOtp && isSignUp && (
+          <button
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            onClick={handleCreateUser}
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        )}
+
+        {error && <p className="text-red-600 text-sm mt-4">{error}</p>}
+        {successMessage && (
+          <p className="text-green-600 text-sm mt-4">{successMessage}</p>
         )}
 
         {!isOtp && (
