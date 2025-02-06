@@ -27,14 +27,16 @@ const Ask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await Axios.post(`/user/question/${userId}`, {
+      const response = await Axios.post("/question/create", {
+        id: userId,
         question: editorValue,
         code: codeValue,
       });
+      alert(response.data.message);
       console.log(response);
-      console.log("Question:", editorValue);
-      console.log("Code:", codeValue);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const Ask = () => {
   }, [codeValue]);
 
   return (
-    <div className="ask-container">
+    <div>
       <h1 className="text-2xl font-semibold mb-4">Ask a Question</h1>
       <form onSubmit={handleSubmit} className="w-full">
         {/* React Quill for rich text */}
@@ -56,29 +58,17 @@ const Ask = () => {
           placeholder="Write your question here..."
         />
 
-        {/* Code editor */}
-        <h2 className="text-xl mb-2">Code (Optional)</h2>
-        <textarea
-          value={codeValue}
-          onChange={handleCodeChange}
-          className="w-full p-2 border rounded-lg mb-4 resize-none"
-          placeholder="Write your code here..."
-          rows="8"
-        />
-
-        {/* Code block with syntax highlighting */}
-        {codeValue && (
-          <div className="mb-4">
-            <h3 className="text-lg mb-2">Code Preview</h3>
-            <pre className="language-javascript">
-              <code
-                ref={codeRef}
-                className="language-javascript"
-                dangerouslySetInnerHTML={{ __html: highlightCode(codeValue) }}
-              ></code>
-            </pre>
-          </div>
-        )}
+        <div className="">
+          {/* Code editor */}
+          <h2 className="text-xl mb-2">Code (Optional)</h2>
+          <textarea
+            value={codeValue}
+            onChange={handleCodeChange}
+            className="w-full p-2 border rounded-lg mb-4 resize-none"
+            placeholder="Write your code here..."
+            rows="8"
+          />
+        </div>
 
         <button
           type="submit"
