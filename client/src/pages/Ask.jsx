@@ -3,11 +3,14 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
+import Axios from "../util/Axios";
 
 const Ask = () => {
   const [editorValue, setEditorValue] = useState("");
   const [codeValue, setCodeValue] = useState("");
   const codeRef = useRef(null);
+
+  const userId = localStorage.getItem("user");
 
   const handleEditorChange = (value) => {
     setEditorValue(value);
@@ -21,10 +24,17 @@ const Ask = () => {
     return Prism.highlight(code, Prism.languages.javascript, "javascript");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Question:", editorValue);
-    console.log("Code:", codeValue);
+    try {
+      const response = await Axios.post(`/user/question/${userId}`, {
+        question: editorValue,
+        code: codeValue,
+      });
+      console.log(response);
+      console.log("Question:", editorValue);
+      console.log("Code:", codeValue);
+    } catch (error) {}
   };
 
   useEffect(() => {
