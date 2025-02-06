@@ -17,4 +17,18 @@ const createQuestion = async (req, res) => {
   }
 };
 
-module.exports = { createQuestion };
+const getQuestions = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await Question.find({});
+    const filteredData = response.filter((item) => item.id.toString() === id);
+
+    return res
+      .status(200)
+      .json({ message: "Filtered questions", questions: filteredData });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createQuestion, getQuestions };
