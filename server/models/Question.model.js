@@ -10,6 +10,9 @@ const QuestionSchema = new mongoose.Schema({
   code: {
     type: String,
   },
+  suggestions: {
+    type: Array,
+  },
 });
 
 module.exports = mongoose.model("Question", QuestionSchema);
