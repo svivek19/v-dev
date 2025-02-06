@@ -85,4 +85,30 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUser, updateUser, getUserbyId };
+const askQuestions = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const { question, code } = req.body;
+
+    // Update both question and code fields in a single $set operation
+    const response = await User.findOneAndUpdate(
+      { _id },
+      { $set: { question, code } }, // Combined $set for both fields
+      { new: true }
+    );
+
+    if (!response) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Question updated successfully", response });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error updating user", error: error.message });
+  }
+};
+
+module.exports = { createUser, getUser, updateUser, getUserbyId, askQuestions };

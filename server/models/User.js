@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    userid: {
-      type: String,
-    },
     name: {
       type: String,
       require: true,
@@ -22,6 +19,15 @@ const UserSchema = new mongoose.Schema(
     },
     otpExpires: {
       type: Date,
+    },
+    question: {
+      type: String,
+    },
+    code: {
+      type: String,
+    },
+    suggestions: {
+      type: Array,
     },
   },
   {
