@@ -20,15 +20,6 @@ const UserSchema = new mongoose.Schema(
     otpExpires: {
       type: Date,
     },
-    question: {
-      type: String,
-    },
-    code: {
-      type: String,
-    },
-    suggestions: {
-      type: Array,
-    },
   },
   {
     timestamps: true,
