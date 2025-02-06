@@ -1,8 +1,13 @@
 const Question = require("../models/Question.model");
+const User = require("../models/User");
 
 const createQuestion = async (req, res) => {
   try {
     const { id, question, code } = req.body;
+
+    if (!id || !question) {
+      return res.status(400).json({ message: "not allowed" });
+    }
 
     const newQuestion = new Question({ id, question, code });
     const response = await newQuestion.save();
@@ -17,7 +22,7 @@ const createQuestion = async (req, res) => {
   }
 };
 
-const getQuestions = async (req, res) => {
+const getQuestionsById = async (req, res) => {
   try {
     const { id } = req.params;
     const response = await Question.find({});
@@ -31,4 +36,27 @@ const getQuestions = async (req, res) => {
   }
 };
 
-module.exports = { createQuestion, getQuestions };
+const getAllQuestions = async (req, res) => {
+  try {
+    const questions = await Question.find({});
+
+    const questionsWithUserData = await Promise.all(
+      questions.map(async (question) => {
+        const user = await User.findById(question.id);
+        return {
+          ...question._doc,
+          user: user ? { name: user.name, email: user.email } : null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      message: "All questions with user data",
+      questions: questionsWithUserData,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createQuestion, getQuestionsById, getAllQuestions };
