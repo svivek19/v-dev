@@ -9,8 +9,8 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Ask from "./pages/Ask";
-import Breadcrumbs from "./components/Breadcrumbs";
 import Login from "./pages/Login";
+import QuestionDetails from "./pages/QuestionDetails";
 
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,12 +27,12 @@ const AppContent = () => {
       )}
       <div className="flex-1 flex flex-col">
         {location.pathname !== "/" && <Navbar toggleSidebar={toggleSidebar} />}
-        {location.pathname !== "/" && <Breadcrumbs />}
         <div className="flex-1 p-4">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/ask" element={<Ask />} />
+            <Route path="/question-details/:id" element={<QuestionDetails />} />
           </Routes>
         </div>
       </div>
