@@ -59,4 +59,33 @@ const getAllQuestions = async (req, res) => {
   }
 };
 
-module.exports = { createQuestion, getQuestionsById, getAllQuestions };
+const createComment = async (req, res) => {
+  try {
+    const { id, suggestions } = req.body;
+
+    if (!id || !suggestions) {
+      return res.status(400).json({ message: "not allowed" });
+    }
+
+    const response = await Question.findOneAndUpdate(
+      { id },
+      { $push: { suggestions } },
+      { new: true }
+    );
+
+    return res
+      .status(201)
+      .json({ message: "Comment added successfully", question: response });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error creating comment", error: error.message });
+  }
+};
+
+module.exports = {
+  createQuestion,
+  getQuestionsById,
+  getAllQuestions,
+  createComment,
+};
