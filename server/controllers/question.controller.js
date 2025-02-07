@@ -25,12 +25,11 @@ const createQuestion = async (req, res) => {
 const getQuestionsByObjId = async (req, res) => {
   try {
     const { id } = req.params;
-    const response = await Question.find({});
-    const filteredData = response.filter((item) => item._id.toString() === id);
+    const response = await Question.find({ _id: id });
 
     return res
       .status(200)
-      .json({ message: "Filtered questions", questions: filteredData });
+      .json({ message: "questions", response: response[0] });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

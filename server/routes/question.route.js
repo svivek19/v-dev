@@ -11,7 +11,7 @@ const QuestionRouter = express.Router();
 
 QuestionRouter.post("/create", createQuestion);
 QuestionRouter.get("/get/:id", getQuestionsById);
-QuestionRouter.get("/get/:id", getQuestionsByObjId);
+QuestionRouter.get("/get-obj/:id", getQuestionsByObjId);
 QuestionRouter.get("/get", getAllQuestions);
 QuestionRouter.patch("/create-comment", createComment);
 
