@@ -61,17 +61,21 @@ const getAllQuestions = async (req, res) => {
 
 const createComment = async (req, res) => {
   try {
-    const { id, suggestions } = req.body;
+    const { id, username, suggestions } = req.body;
 
-    if (!id || !suggestions) {
-      return res.status(400).json({ message: "not allowed" });
+    if (!id || !username || !suggestions) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     const response = await Question.findOneAndUpdate(
       { id },
-      { $push: { suggestions } },
+      { $push: { suggestions: { username, suggestions } } },
       { new: true }
     );
+
+    if (!response) {
+      return res.status(404).json({ message: "Question not found" });
+    }
 
     return res
       .status(201)
