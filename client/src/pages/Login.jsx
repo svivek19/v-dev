@@ -47,7 +47,7 @@ const Login = () => {
       localStorage.setItem("user", response.data.response._id);
       setSuccessMessage("OTP verified successfully!");
       setTimeout(() => {
-        navigate("/home");
+        navigate("/home", { replace: true });
       }, 1000);
     } catch (error) {
       setError(error.response?.data?.message || "Invalid OTP");

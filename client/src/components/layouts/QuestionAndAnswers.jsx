@@ -53,7 +53,7 @@ const QuestionAndAnswers = () => {
           >
             {/* Question */}
             <div className="mb-4">
-              <Link to={`/question-details/${item._id}`}>
+              <Link to={`/question-details/${item._id}`} replace={true}>
                 <div
                   className="text-lg sm:text-xl font-medium break-words hover:text-blue-500"
                   dangerouslySetInnerHTML={{ __html: item.question }}

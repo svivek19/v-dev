@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
-import { CiLogout } from "react-icons/ci";
+import { CiLogin, CiLogout } from "react-icons/ci";
 import { Modal } from "antd";
 import Axios from "../util/Axios";
 
@@ -28,7 +28,8 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   const handleLogout = () => {
-    alert("logout");
+    localStorage.clear();
+    navigate("/", { replace: true });
   };
 
   const handleCloseModal = () => {
@@ -84,26 +85,46 @@ const Navbar = ({ toggleSidebar }) => {
       </button>
       <Link
         to={"/home"}
+        replace={true}
         className="text-3xl font-semibold bg-gradient-to-r from-yellow-500 to-green-500 bg-clip-text text-transparent"
       >
         V-DEV
       </Link>
       <div className="flex items-center space-x-6">
         <nav className="hidden lg:flex space-x-6">
-          <Link to="/home" className="hover:text-gray-400">
+          <Link to="/home" replace={true} className="hover:text-gray-400">
             Home
           </Link>
-          <Link to="/ask" className="hover:text-gray-400">
-            Ask
-          </Link>
+          {userId && (
+            <Link to="/ask" className="hover:text-gray-400">
+              Ask
+            </Link>
+          )}
         </nav>
         <div className="items-center flex gap-3">
-          <button className="cursor-pointer" onClick={handleProfileClick}>
-            <RxAvatar size={30} />
-          </button>
-          <button className="cursor-pointer" onClick={handleLogout}>
-            <CiLogout size={30} />
-          </button>
+          {userId && (
+            <button className="cursor-pointer" onClick={handleProfileClick}>
+              <RxAvatar size={30} />
+            </button>
+          )}
+
+          {userId ? (
+            <button
+              className="cursor-pointer"
+              onClick={handleLogout}
+              title="logout"
+            >
+              <CiLogout size={30} />
+            </button>
+          ) : (
+            <button
+              className="cursor-pointer"
+              onClick={() => navigate("/")}
+              title="login"
+            >
+              <CiLogin size={30} />
+            </button>
+          )}
         </div>
       </div>
 

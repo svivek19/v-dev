@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+  const userId = localStorage.getItem("user");
   return (
     <div
       className={`fixed top-0 left-0 h-full bg-gray-800 text-white w-64 transform ${
@@ -22,19 +23,23 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         <ul>
           <li className="flex flex-col gap-4">
             <Link
-              to="/"
+              to="/home"
+              replace={true}
               className="hover:text-gray-400"
               onClick={toggleSidebar}
             >
               Home
             </Link>
-            <Link
-              to="/ask"
-              className="hover:text-gray-400"
-              onClick={toggleSidebar}
-            >
-              Ask
-            </Link>
+            {userId && (
+              <Link
+                to="/ask"
+                replace={true}
+                className="hover:text-gray-400"
+                onClick={toggleSidebar}
+              >
+                Ask
+              </Link>
+            )}
           </li>
         </ul>
       </nav>
