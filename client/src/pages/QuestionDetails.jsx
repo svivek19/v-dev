@@ -6,7 +6,10 @@ import avatar from "../assets/avatar.png";
 
 const QuestionDetails = () => {
   const { id } = useParams();
+  const userId = localStorage.getItem("user");
   const [ques, setQues] = useState([]);
+  const [user, setUser] = useState([]);
+  const [comment, setComment] = useState([]);
 
   const getQuestion = async () => {
     try {
@@ -17,9 +20,35 @@ const QuestionDetails = () => {
     }
   };
 
+  const getUserDetails = async () => {
+    try {
+      const response = await Axios.get("/user/get/" + userId);
+      setUser(response.data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getQuestion();
+    getUserDetails();
   }, []);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await Axios.patch("/question/create-comment", {
+        id: userId,
+        username: user.name,
+        suggestions: comment,
+      });
+      alert("success");
+      console.log(response);
+      getQuestion();
+    } catch (error) {
+      alert("error");
+      console.log(error);
+    }
+  };
 
   function formatLocalDateTime(isoDate) {
     const date = new Date(isoDate);
@@ -64,16 +93,20 @@ const QuestionDetails = () => {
             <input
               type="text"
               placeholder="Enter your text..."
+              onChange={(e) => setComment(e.target.value)}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <button className="cursor-pointer bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+            <button
+              onClick={handleSubmit}
+              className="cursor-pointer bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
               Submit
             </button>
           </div>
 
           <div className="my-4 h-64 overflow-y-scroll">
             {ques.suggestions &&
-              ques.suggestions.map((item, i) => (
+              [...ques.suggestions].reverse().map((item, i) => (
                 <div key={i} className="mb-4 ">
                   <div className="flex items-center gap-2 mb-2">
                     <img
@@ -92,11 +125,6 @@ const QuestionDetails = () => {
                   </div>
                   <p className="text-sm text-gray-700 mt-2">
                     {item.suggestions}
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Temporibus quas quasi accusantium laboriosam. Accusantium
-                    corrupti iure cum vel quisquam, est enim qui. Consequuntur
-                    nihil ratione officia quidem reprehenderit numquam
-                    temporibus.
                   </p>
 
                   <hr className="mt-4 border border-slate-300" />
