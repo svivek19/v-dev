@@ -100,8 +100,42 @@ const createComment = async (req, res) => {
   }
 };
 
+const getRelatedQuestions = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const questionObj = await Question.findById(id);
+    if (!questionObj) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    const keywords = [
+      ...new Set(
+        questionObj.question.split(/\s+/).map((word) => word.toLowerCase())
+      ),
+    ];
+
+    const relatedQuestions = await Question.find({
+      question: { $regex: keywords.join("|"), $options: "i" },
+    });
+
+    return res.status(200).json({
+      message: "Related questions found",
+      relatedQuestions: relatedQuestions.filter((q) => q._id.toString() !== id),
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        message: "Error fetching related questions",
+        error: error.message,
+      });
+  }
+};
+
 module.exports = {
   createQuestion,
+  getRelatedQuestions,
   getQuestionsById,
   getAllQuestions,
   createComment,
