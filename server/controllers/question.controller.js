@@ -81,7 +81,7 @@ const createComment = async (req, res) => {
     }
 
     const response = await Question.findOneAndUpdate(
-      { id },
+      { _id: id },
       { $push: { suggestions: { username, suggestions } } },
       { new: true }
     );
@@ -124,12 +124,10 @@ const getRelatedQuestions = async (req, res) => {
       relatedQuestions: relatedQuestions.filter((q) => q._id.toString() !== id),
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        message: "Error fetching related questions",
-        error: error.message,
-      });
+    return res.status(500).json({
+      message: "Error fetching related questions",
+      error: error.message,
+    });
   }
 };
 
