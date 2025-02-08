@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "../util/Axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CodeBlock, dracula } from "react-code-blocks";
 import avatar from "../assets/avatar.png";
 
@@ -10,6 +10,7 @@ const QuestionDetails = () => {
   const [ques, setQues] = useState([]);
   const [user, setUser] = useState([]);
   const [comment, setComment] = useState([]);
+  const [relatedQues, setRelatedQues] = useState([]);
 
   const getQuestion = async () => {
     try {
@@ -29,10 +30,20 @@ const QuestionDetails = () => {
     }
   };
 
+  const getRelatedQuestion = async () => {
+    try {
+      const response = await Axios.get("/question/get-related/" + id);
+      setRelatedQues(response.data.relatedQuestions || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getQuestion();
     getUserDetails();
-  }, []);
+    getRelatedQuestion();
+  }, [id]);
 
   const handleSubmit = async () => {
     try {
@@ -135,12 +146,26 @@ const QuestionDetails = () => {
       </div>
 
       <div className="w-full md:w-1/3">
-        <h3 className="text-lg font-bold mb-2">Related Insights</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque vel
-          culpa dolorum ipsam natus a accusantium. Vero alias eius incidunt
-          mollitia saepe quia nisi quod iste beatae, laborum, id vitae!
-        </p>
+        <h3 className="text-lg font-bold mb-2 underline underline-offset-2">
+          Related Insights
+        </h3>
+        {relatedQues.length > 0 ? (
+          relatedQues.map((item, i) => (
+            <div key={i} className="bg-gray-50 p-2 rounded-md text-base">
+              <Link to={`/question-details/${item._id}`}>
+                <h1 className="tracking-wider font-normal hover:text-blue-500">
+                  {item.question}
+                </h1>
+                <div className="text-xs flex justify-end">
+                  <p>{formatLocalDateTime(item.createdAt)}</p>
+                </div>
+              </Link>
+              <hr className="border border-slate-300 my-4" />
+            </div>
+          ))
+        ) : (
+          <p className="text-red-500">No Activity Recorded</p>
+        )}
       </div>
     </div>
   );
