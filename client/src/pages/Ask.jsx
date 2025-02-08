@@ -47,7 +47,7 @@ const Ask = () => {
   }, [codeValue]);
 
   return (
-    <div>
+    <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4">Ask a Question</h1>
       <form onSubmit={handleSubmit} className="w-full">
         {/* React Quill for rich text */}

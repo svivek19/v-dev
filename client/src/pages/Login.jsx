@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Axios from "../util/Axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { FaHouseChimneyUser } from "react-icons/fa6";
 
 const sendOtpApiUrl = "/auth/send-otp";
 const verifyOtpApiUrl = "/auth/verify-otp";
@@ -85,11 +86,20 @@ const Login = () => {
   }, [error, successMessage]);
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-96 flex flex-col items-center relative">
+    <div className="w-full min-h-screen flex flex-col md:flex-row items-center justify-center">
+      {/* Left Side (3D Object Section) */}
+      <div className="w-full md:w-1/2 h-64 md:h-screen">
+        <iframe
+          src="https://my.spline.design/nexbotrobotcharacterconcept-d4734d5f02e6e320d0f5ad56aa2482d8/"
+          className="w-full h-full"
+        ></iframe>
+      </div>
+
+      {/* Right Side (Form Section) */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-4 relative">
         {isOtp || isSignUp ? (
           <button
-            className="absolute left-4 top-4 text-gray-600 hover:text-gray-800"
+            className="absolute left-0 right-80 top-4 text-gray-600 hover:text-gray-800"
             onClick={() => {
               if (isOtp) setIsOtp(false);
               else setIsSignUp(false);
@@ -99,8 +109,8 @@ const Login = () => {
           </button>
         ) : null}
 
-        <img src={logo} alt="V-DEV Logo" className="w-32 mb-4" />
-        <h1 className="text-xl font-semibold mb-6 text-gray-700 text-center">
+        <img src={logo} alt="V-DEV Logo" className="w-24 md:w-32 mb-4" />
+        <h1 className="text-lg md:text-xl font-semibold mb-6 text-gray-700 text-center">
           {isSignUp ? "Create your V-DEV Account" : "Sign in to access "}
           {!isSignUp && !isOtp && (
             <span className="text-blue-600">V-DEV Home</span>
@@ -108,79 +118,78 @@ const Login = () => {
           {isOtp && "Enter OTP to Continue"}
         </h1>
 
-        {!isOtp && isSignUp && (
-          <>
+        <div className="w-full max-w-sm">
+          {!isOtp && isSignUp && (
+            <>
+              <input
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Full Name"
+                className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="number"
+                onChange={(e) => setAge(e.target.value)}
+                min={0}
+                max={15}
+                placeholder="Age"
+                className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="email"
+                placeholder="Email address"
+                className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setLoginEmail(e.target.value)}
+              />
+            </>
+          )}
+
+          {!isOtp && !isSignUp && (
             <input
               type="text"
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full Name"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              type="number"
-              onChange={(e) => setAge(e.target.value)}
-              min={0}
-              max={15}
-              placeholder="Age"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-            <input
-              type="email"
+              onChange={(e) => setLoginEmail(e.target.value)}
               placeholder="Email address"
               className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => setLoginEmail(e.target.value)}
             />
-          </>
-        )}
+          )}
 
-        {!isOtp && !isSignUp && (
-          <input
-            type="text"
-            onChange={(e) => setLoginEmail(e.target.value)}
-            placeholder="Email address"
-            className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        )}
+          {isOtp && (
+            <>
+              <input
+                type="text"
+                maxLength={6}
+                placeholder="Enter 6-digit OTP"
+                className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest"
+                onChange={(e) => setOtp(e.target.value)}
+              />
+              <button
+                className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+                onClick={handleVerifyOtp}
+                disabled={loading}
+              >
+                {loading ? "Verifying..." : "Verify OTP"}
+              </button>
+            </>
+          )}
 
-        {isOtp && (
-          <>
-            <input
-              type="text"
-              maxLength={6}
-              placeholder="Enter 6-digit OTP"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest"
-              onChange={(e) => setOtp(e.target.value)}
-            />
+          {!isOtp && (
             <button
-              className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
-              onClick={handleVerifyOtp}
+              className={`w-full ${
+                isSignUp ? "bg-blue-600" : "bg-blue-500"
+              } text-white py-2 rounded-md hover:bg-blue-700 transition`}
+              onClick={isSignUp ? handleCreateUser : handleSendOtp}
               disabled={loading}
             >
-              {loading ? "Verifying..." : "Verify OTP"}
+              {loading
+                ? isSignUp
+                  ? "Creating Account..."
+                  : "Sending OTP..."
+                : isSignUp
+                ? "Sign Up"
+                : "Send OTP"}
             </button>
-          </>
-        )}
-
-        {!isOtp && !isSignUp && (
-          <button
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={handleSendOtp}
-            disabled={loading}
-          >
-            {loading ? "Sending OTP..." : "Send OTP"}
-          </button>
-        )}
-
-        {!isOtp && isSignUp && (
-          <button
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={handleCreateUser}
-            disabled={loading}
-          >
-            {loading ? "Creating Account..." : "Sign Up"}
-          </button>
-        )}
+          )}
+        </div>
 
         {error && <p className="text-red-600 text-sm mt-4">{error}</p>}
         {successMessage && (
@@ -193,13 +202,20 @@ const Login = () => {
               ? "Already have an account?"
               : "Don't have a V-DEV account?"}
             <span
-              className="text-blue-600 cursor-pointer hover:underline"
+              className="text-blue-600 cursor-pointer hover:underline ml-1"
               onClick={() => setIsSignUp(!isSignUp)}
             >
-              {isSignUp ? " Sign in" : " Sign up now"}
+              {isSignUp ? "Sign in" : "Sign up now"}
             </span>
           </p>
         )}
+
+        <Link to={"/home"}>
+          <div className="flex items-center gap-2 bg-gray-200 duration-300 hover:bg-gray-300 cursor-pointer px-3 py-1 rounded-md mt-4">
+            <p className="text-gray-800">Guest</p>
+            <FaHouseChimneyUser className="text-gray-800" size={15} />
+          </div>
+        </Link>
       </div>
     </div>
   );

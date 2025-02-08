@@ -4,10 +4,13 @@ import { CodeBlock, dracula } from "react-code-blocks";
 import { PulseLoader } from "react-spinners";
 import avatar from "../../assets/avatar.png";
 import { Link } from "react-router-dom";
+import { IoSearch } from "react-icons/io5";
+import { BiArrowToTop } from "react-icons/bi";
 
 const QuestionAndAnswers = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   function formatLocalDate(utcDate) {
     const date = new Date(utcDate);
@@ -37,10 +40,37 @@ const QuestionAndAnswers = () => {
 
   useEffect(() => {
     getQuestions();
+
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div className="w-full">
+      <div className="relative mb-4">
+        <input
+          type="text"
+          placeholder="Search"
+          className="border border-gray-600 rounded-lg px-10 py-1.5 w-full focus:outline-none"
+        />
+        <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        <button className="absolute right-0.5 top-1/2 -translate-y-1/2 p-2 bg-orange-500 text-white rounded-lg">
+          <IoSearch className="text-white font-bold" size={17} />
+        </button>
+      </div>{" "}
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <PulseLoader color="#FFA500" size={15} />
@@ -101,6 +131,14 @@ const QuestionAndAnswers = () => {
             </div>
           </div>
         ))
+      )}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600 text-white p-3 rounded-full shadow-lg transition-opacity animate-bounce cursor-pointer"
+        >
+          <BiArrowToTop size={25} />
+        </button>
       )}
     </div>
   );

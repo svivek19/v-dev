@@ -27,7 +27,7 @@ const AppContent = () => {
       )}
       <div className="flex-1 flex flex-col">
         {location.pathname !== "/" && <Navbar toggleSidebar={toggleSidebar} />}
-        <div className="flex-1 p-4">
+        <div className="flex-1">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
