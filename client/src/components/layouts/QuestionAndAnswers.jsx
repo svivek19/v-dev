@@ -11,6 +11,7 @@ const QuestionAndAnswers = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   function formatLocalDate(utcDate) {
     const date = new Date(utcDate);
@@ -58,6 +59,11 @@ const QuestionAndAnswers = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const filteredQuestions = questions.filter(
+    (item) =>
+      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <div className="w-full">
       <div className="relative mb-4">
@@ -65,23 +71,29 @@ const QuestionAndAnswers = () => {
           type="text"
           placeholder="Search"
           className="border border-gray-600 rounded-lg px-10 py-1.5 w-full focus:outline-none"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <button className="absolute right-0.5 top-1/2 -translate-y-1/2 p-2 bg-orange-500 text-white rounded-lg">
           <IoSearch className="text-white font-bold" size={17} />
         </button>
-      </div>{" "}
+      </div>
+
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <PulseLoader color="#FFA500" size={15} />
         </div>
+      ) : filteredQuestions.length === 0 ? (
+        <div className="text-center text-red-600">
+          <p>No questions found.</p>
+        </div>
       ) : (
-        questions.map((item, index) => (
+        filteredQuestions.map((item, index) => (
           <div
             key={index}
             className="border border-amber-400 p-4 rounded-lg mb-4"
           >
-            {/* Question */}
             <div className="mb-4">
               <Link to={`/question-details/${item._id}`} replace={true}>
                 <div
@@ -96,7 +108,6 @@ const QuestionAndAnswers = () => {
 
             <hr className="text-slate-400" />
 
-            {/* Answer */}
             <div className="my-2 sm:my-4">
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-2 mb-2">
