@@ -30,6 +30,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             >
               Home
             </Link>
+            <Link
+              to="/roadmap-ai"
+              replace={true}
+              className="hover:text-gray-400"
+              onClick={toggleSidebar}
+            >
+              Learning Guide
+            </Link>
             {userId && (
               <Link
                 to="/ask"

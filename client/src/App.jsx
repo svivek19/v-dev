@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Ask from "./pages/Ask";
 import Login from "./pages/Login";
 import QuestionDetails from "./pages/QuestionDetails";
+import Roadmap from "./pages/Roadmap";
 
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -33,6 +34,7 @@ const AppContent = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/ask" element={<Ask />} />
             <Route path="/question-details/:id" element={<QuestionDetails />} />
+            <Route path="/roadmap-ai" element={<Roadmap />} />
           </Routes>
         </div>
       </div>

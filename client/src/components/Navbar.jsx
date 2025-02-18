@@ -95,6 +95,9 @@ const Navbar = ({ toggleSidebar }) => {
           <Link to="/home" replace={true} className="hover:text-gray-400">
             Home
           </Link>
+          <Link to="/roadmap-ai" replace={true} className="hover:text-gray-400">
+            Learning Guide
+          </Link>
           {userId && (
             <Link to="/ask" className="hover:text-gray-400">
               Ask
