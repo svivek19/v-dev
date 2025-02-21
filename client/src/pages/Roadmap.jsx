@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Axios from "../util/Axios";
 import AiResponse from "../components/AiResponse";
-
-const API_URL =
-  "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText";
+import { Link, useNavigate } from "react-router-dom";
 
 const Roadmap = () => {
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     skill: "",
     level: "",
@@ -21,32 +20,8 @@ const Roadmap = () => {
   const levels = ["Beginner", "Intermediate", "Advanced"];
 
   useEffect(() => {
-    fetchSkills();
+    setSkills(DEFAULT_SKILLS);
   }, []);
-
-  const fetchSkills = async () => {
-    try {
-      setIsLoading(true);
-      const response = await Axios.post(`${API_URL}/ai/generate`, {
-        prompt: "List common programming and technology skills.",
-      });
-
-      const skillList =
-        response.data?.candidates?.[0]?.output
-          ?.split("\n")
-          .map((skill) => skill.trim())
-          .filter(Boolean) || [];
-
-      setSkills(skillList.length ? skillList : DEFAULT_SKILLS);
-      setError("");
-    } catch (err) {
-      console.error("Error fetching skills:", err);
-      setSkills(DEFAULT_SKILLS);
-      setError("Failed to fetch skills. Using default list.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const generateRoadmap = async () => {
     if (!formData.skill || !formData.level || !formData.duration) {
@@ -58,18 +33,10 @@ const Roadmap = () => {
       setIsLoading(true);
       setError("");
 
-      const response = await Axios.post(`${API_URL}/ai/generate`, {
-        prompt: `Generate a detailed learning roadmap for mastering ${formData.skill} 
-        at ${formData.level} level in ${formData.duration} weeks. 
-        Include step-by-step topics, hands-on projects, and advanced concepts.`,
+      const response = await Axios.post(`/ai/generate`, {
+        prompt: `Generate a structured ${formData.duration}-week learning roadmap for a ${formData.level} in ${formData.skill}. Break it down week-wise with bullet points.`,
       });
-
-      const generatedText = response.data?.candidates?.[0]?.output;
-      if (!generatedText) {
-        throw new Error("No roadmap content received");
-      }
-
-      setRoadmap(generatedText);
+      setRoadmap(response.data.response || {});
       setStep(2);
     } catch (err) {
       console.error("Error generating roadmap:", err);
@@ -103,6 +70,7 @@ const Roadmap = () => {
 
       {step === 1 ? (
         <div className="space-y-6">
+          {/* Skill Search and Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">
               Search & Select a Skill:
@@ -118,7 +86,7 @@ const Roadmap = () => {
               {filteredSkills.map((s, index) => (
                 <button
                   key={index}
-                  className={`px-4 py-2 rounded transition ${
+                  className={`px-4 py-2 rounded transition cursor-pointer ${
                     formData.skill === s
                       ? "bg-blue-600 text-white"
                       : "bg-gray-200 text-gray-700"
@@ -131,6 +99,7 @@ const Roadmap = () => {
             </div>
           </div>
 
+          {/* Learning Level Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">
               Learning Level:
@@ -139,7 +108,7 @@ const Roadmap = () => {
               {levels.map((lvl) => (
                 <button
                   key={lvl}
-                  className={`px-4 py-2 rounded transition ${
+                  className={`px-4 py-2 rounded transition cursor-pointer ${
                     formData.level === lvl
                       ? "bg-blue-600 text-white"
                       : "bg-gray-200 text-gray-700"
@@ -152,6 +121,7 @@ const Roadmap = () => {
             </div>
           </div>
 
+          {/* Duration Input */}
           <div>
             <label className="block text-sm font-medium mb-2">
               Time Duration (weeks):
@@ -167,6 +137,7 @@ const Roadmap = () => {
             />
           </div>
 
+          {/* Generate Roadmap Button */}
           <button
             className={`w-full py-2 rounded transition ${
               isLoading
@@ -181,36 +152,34 @@ const Roadmap = () => {
         </div>
       ) : (
         <div className="space-y-6">
+          {/* Generated Roadmap Display */}
           <div className="p-4 bg-gray-50 rounded">
             <h3 className="text-lg font-medium mb-4">Your Learning Plan:</h3>
             <div className="whitespace-pre-line">
-              <AiResponse />
+              {roadmap && <AiResponse response={roadmap} />}
             </div>
           </div>
 
+          {/* Navigation Buttons */}
           <div className="flex justify-between">
             <button
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+              className="px-4 py-2 cursor-pointer bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
               onClick={() => setStep(1)}
               disabled={isLoading}
             >
               Back
             </button>
-            <button
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-              disabled={isLoading}
-            >
-              Start Learning
+            <button className="cursor-pointer px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+              <Link to={"/home"}>Start Learning</Link>
             </button>
           </div>
         </div>
       )}
-
-      <AiResponse />
     </div>
   );
 };
 
+// Default skills list
 const DEFAULT_SKILLS = [
   "React",
   "Node.js",
