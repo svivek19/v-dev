@@ -95,9 +95,23 @@ const Navbar = ({ toggleSidebar }) => {
           <Link to="/home" replace={true} className="hover:text-gray-400">
             Home
           </Link>
-          <Link to="/roadmap-ai" replace={true} className="hover:text-gray-400">
-            Learning Guide
-          </Link>
+
+          {userId ? (
+            <Link
+              to="/roadmap-ai"
+              replace={true}
+              className="hover:text-gray-400"
+            >
+              Learning Guide
+            </Link>
+          ) : (
+            <div className="relative group">
+              <p className="hover:text-gray-400 cursor-help">Learning Guide</p>
+              <div className="absolute left-0 top-full mb-2 hidden w-max bg-red-500 text-red-100 text-xs rounded-md px-2 py-1 group-hover:block">
+                Login to explore
+              </div>
+            </div>
+          )}
           {userId && (
             <Link to="/ask" className="hover:text-gray-400">
               Ask
