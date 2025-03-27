@@ -112,10 +112,17 @@ const Navbar = ({ toggleSidebar }) => {
               </div>
             </div>
           )}
-          {userId && (
+          {userId ? (
             <Link to="/ask" className="hover:text-gray-400">
               Ask
             </Link>
+          ) : (
+            <div className="relative group">
+              <p className="hover:text-gray-400 cursor-help">Ask</p>
+              <div className="absolute right-3 top-full mb-2 hidden w-max bg-blue-500 text-blue-100 text-xs rounded-md px-2 py-1 group-hover:block">
+                Login to explore
+              </div>
+            </div>
           )}
         </nav>
         <div className="items-center flex gap-3">

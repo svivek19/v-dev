@@ -30,15 +30,26 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             >
               Home
             </Link>
-            <Link
-              to="/roadmap-ai"
-              replace={true}
-              className="hover:text-gray-400"
-              onClick={toggleSidebar}
-            >
-              Learning Guide
-            </Link>
-            {userId && (
+            {userId ? (
+              <Link
+                to="/roadmap-ai"
+                replace={true}
+                className="hover:text-gray-400"
+                onClick={toggleSidebar}
+              >
+                Learning Guide
+              </Link>
+            ) : (
+              <div className="relative group">
+                <p className="hover:text-gray-400 cursor-help">
+                  Learning Guide
+                </p>
+                <div className="absolute right-3 top-full mb-2 hidden w-max bg-red-500 text-red-100 text-xs rounded-md px-2 py-1 group-hover:block">
+                  Login to explore
+                </div>
+              </div>
+            )}
+            {userId ? (
               <Link
                 to="/ask"
                 replace={true}
@@ -47,6 +58,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               >
                 Ask
               </Link>
+            ) : (
+              <div className="relative group">
+                <p className="hover:text-gray-400 cursor-help">Ask</p>
+                <div className="absolute right-3 top-full mb-2 hidden w-max bg-blue-500 text-blue-100 text-xs rounded-md px-2 py-1 group-hover:block">
+                  Login to explore
+                </div>
+              </div>
             )}
           </li>
         </ul>
