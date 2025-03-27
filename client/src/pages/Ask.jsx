@@ -4,10 +4,14 @@ import "react-quill/dist/quill.snow.css";
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import Axios from "../util/Axios";
+import { useToasts } from "react-toast-notifications";
+import { useNavigate } from "react-router-dom";
 
 const Ask = () => {
+  const { addToast } = useToasts();
   const [editorValue, setEditorValue] = useState("");
   const [codeValue, setCodeValue] = useState("");
+  const navigate = useNavigate();
   const codeRef = useRef(null);
 
   const userId = localStorage.getItem("user");
@@ -32,8 +36,8 @@ const Ask = () => {
         question: editorValue,
         code: codeValue,
       });
-      alert(response.data.message);
-      console.log(response);
+      addToast(response.data.message, { appearance: "success" });
+      navigate(-1);
     } catch (error) {
       console.log(error);
     }

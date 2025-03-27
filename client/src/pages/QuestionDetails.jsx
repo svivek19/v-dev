@@ -4,9 +4,11 @@ import { Link, useParams } from "react-router-dom";
 import { CodeBlock, dracula } from "react-code-blocks";
 import avatar from "../assets/avatar.png";
 import { PulseLoader } from "react-spinners";
+import { useToasts } from "react-toast-notifications";
 
 const QuestionDetails = () => {
   const { id } = useParams();
+  const { addToast } = useToasts();
   const userId = localStorage.getItem("user");
 
   const [ques, setQues] = useState(null);
@@ -63,10 +65,10 @@ const QuestionDetails = () => {
         suggestions: comment,
       });
       setComment("");
-      alert("Comment submitted successfully!");
-      getQuestion(); // Refresh the question with the latest comment
+      addToast("Comment submitted successfully!", { appearance: "success" });
+      getQuestion();
     } catch (error) {
-      alert("Error submitting comment.");
+      addToast("Error submitting comment.", { appearance: "error" });
       console.log("Error:", error);
     }
   };
