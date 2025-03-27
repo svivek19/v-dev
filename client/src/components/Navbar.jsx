@@ -158,75 +158,92 @@ const Navbar = ({ toggleSidebar }) => {
         onCancel={handleCloseModal}
         footer={false}
       >
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <FaUserAlt size={20} className="text-gray-600" />
-            <span className="font-semibold">Name:</span>
-            {isEditing ? (
-              <input
-                type="text"
-                name="name"
-                value={updatedDetails.name}
-                onChange={handleInputChange}
-                className="border px-2 py-1 rounded-md"
-              />
-            ) : (
-              <span className="capitalize">{updatedDetails.name}</span>
-            )}
-            <button onClick={handleEditToggle} className="ml-2 text-blue-600">
-              <FaEdit size={18} />
-            </button>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <FaBirthdayCake size={20} className="text-gray-600" />
-            <span className="font-semibold">Age:</span>
-            {isEditing ? (
-              <input
-                type="number"
-                name="age"
-                value={updatedDetails.age}
-                onChange={handleInputChange}
-                className="border px-2 py-1 rounded-md"
-              />
-            ) : (
-              <span>{updatedDetails.age}</span>
-            )}
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <FaEnvelope size={20} className="text-gray-600" />
-            <span className="font-semibold">Email:</span>
-            {isEditing ? (
-              <input
-                type="email"
-                name="email"
-                disabled
-                value={updatedDetails.email}
-                onChange={handleInputChange}
-                className="border px-2 py-1 rounded-md"
-              />
-            ) : (
-              <span>{updatedDetails.email}</span>
-            )}
-          </div>
-
-          {isEditing && (
-            <div className="flex justify-end space-x-4">
+        <div className="bg-gradient-to-br from-gray-100 to-gray-300 text-black shadow-xl rounded-xl p-6 max-w-md mx-auto">
+          <div className="space-y-6">
+            {/* Name */}
+            <div className="flex items-center justify-between border-b border-gray-700 pb-3">
+              <div className="flex items-center space-x-3">
+                <FaUserAlt size={22} className="text-gray-900" />
+                <span className="font-medium text-gray-800">Name:</span>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="name"
+                    value={updatedDetails.name}
+                    onChange={handleInputChange}
+                    className="bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 focus:outline-none rounded-md px-3 py-1 text-white"
+                  />
+                ) : (
+                  <span className="capitalize text-gray-800">
+                    {updatedDetails.name}
+                  </span>
+                )}
+              </div>
               <button
-                onClick={handleUpdate}
-                className="bg-blue-600 text-white py-2 px-4 rounded-md"
+                onClick={handleEditToggle}
+                className="text-blue-400 hover:text-blue-500 transition duration-200"
               >
-                Update
-              </button>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-400 text-white py-2 px-4 rounded-md cursor-pointer"
-              >
-                Cancel
+                <FaEdit size={18} />
               </button>
             </div>
-          )}
+
+            {/* Age */}
+            <div className="flex items-center justify-between border-b border-gray-700 pb-3">
+              <div className="flex items-center space-x-3">
+                <FaBirthdayCake size={22} className="text-gray-900" />
+                <span className="font-medium text-gray-800">Age:</span>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    name="age"
+                    value={updatedDetails.age}
+                    onChange={handleInputChange}
+                    className="bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 focus:outline-none rounded-md px-3 py-1 text-white"
+                  />
+                ) : (
+                  <span className="text-gray-800">{updatedDetails.age}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="flex items-center justify-between border-b border-gray-700 pb-3">
+              <div className="flex items-center space-x-3">
+                <FaEnvelope size={22} className="text-gray-900" />
+                <span className="font-medium text-gray-800">Email:</span>
+                {isEditing ? (
+                  <input
+                    type="email"
+                    name="email"
+                    disabled
+                    value={updatedDetails.email}
+                    onChange={handleInputChange}
+                    className="bg-gray-700 border border-gray-600 rounded-md px-3 py-1 text-gray-500 cursor-not-allowed"
+                  />
+                ) : (
+                  <span className="text-gray-800">{updatedDetails.email}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Buttons */}
+            {isEditing && (
+              <div className="flex justify-end space-x-3 mt-4">
+                <button
+                  onClick={handleUpdate}
+                  className="bg-blue-500 hover:bg-blue-600 transition text-white font-medium py-2 px-5 rounded-lg shadow-md"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-gray-600 hover:bg-gray-700 transition text-white font-medium py-2 px-5 rounded-lg shadow-md"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </Modal>
     </header>
